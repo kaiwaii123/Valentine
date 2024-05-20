@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ILOVEYOU!</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="password"] {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+        input[type="password"]:focus {
+            border-color: #ff99cc;
+            box-shadow: 0 0 8px rgba(255, 153, 204, 0.3);
+            outline: none;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #ff99cc;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        button:hover {
+            background-color: #ff6699;
+        }
+        canvas {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>請輸入密碼</h1>
+        <input type="password" id="password" placeholder="輸入密碼">
+        <button onclick="checkPassword()">提交</button>
+        <canvas id="heartCanvas" width="500" height="500"></canvas>
+    </div>
+    <script>
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === 'xylia') {
+                askQuestions();
+            } else {
+                alert('密碼錯誤，請再試一次。');
+            }
+        }
+
+        function askQuestions() {
+            let isLoved = true;
+            for (let i = 0; i < 3; i++) {
+                if (!confirm(`你真的愛我嘛${'!'.repeat(i + 1)}`)) {
+                    isLoved = false;
+                    break;
+                }
+            }
+            if (isLoved) {
+                const canvas = document.getElementById('heartCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.style.display = 'block';
+                drawHeart(ctx);
+            } else {
+                alert('錯誤！請重新開始。');
+            }
+        }
+
+        function drawHeart(ctx) {
+            const width = ctx.canvas.width;
+            const height = ctx.canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 10;
+            let progress = 0;
+            const maxProgress = Math.PI * 2;
+
+            function draw() {
+                progress += 0.05; // 加快繪畫速度
+                if (progress > maxProgress) {
+                    showAlert();
+                    return;
+                }
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.beginPath();
+
+                for (let angle = 0; angle <= progress; angle += 0.01) {
+                    const x = centerX + scale * 16 * Math.pow(Math.sin(angle), 3);
+                    const y = centerY - scale * (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+                    if (angle === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        function showAlert() {
+            alert('我也愛你喔!!!! 500天快樂');
+            window.close(); // 關閉窗口
+        }
+    </script>
+</body>
+</html>
